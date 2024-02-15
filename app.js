@@ -2,140 +2,158 @@ require('colors');
 
 const fs = require('fs');
 
+// Importa el módulo fs (file system) para trabajar con el sistema de archivos
+const fs = require('fs');
+
+// Carga los datos desde el archivo datos.json
 const datosArchivo = require('./datos.json');
 
-const main= async() =>{
-    console.clear(); 
+// Función principal del script
+const main = async () => {
+    // Limpia la consola
+    console.clear();
     console.log(`************************************`);
     console.log(`****     PROYECTO CLASES         ***`);
     console.log(`************************************\n`);
 
+    // Define la clase Producto para representar un producto en la tienda
     class Producto {
-
-        #codigoProducto; 
+        #codigoProducto;
         #nombreProducto;
-        #inventarioProducto; 
+        #inventarioProducto;
         #precioProducto;
 
-        constructor(){
-            this.#codigoProducto ;
-            this. #nombreProducto;
-            this.#inventarioProducto = 0; 
+        constructor() {
+            this.#codigoProducto;
+            this.#nombreProducto;
+            this.#inventarioProducto = 0;
             this.#precioProducto = 0;
         }
 
-        set setCodigoProducto (value) {
+        // Métodos setter y getter para el código del producto
+        set setCodigoProducto(value) {
             this.#codigoProducto = value;
         }
-
-        get getCodigoProducto(){
+        get getCodigoProducto() {
             return this.#codigoProducto;
         }
 
-        set setNombreProducto (value) { 
-            this. #nombreProducto = value;
+        // Métodos setter y getter para el nombre del producto
+        set setNombreProducto(value) {
+            this.#nombreProducto = value;
+        }
+        get getNombreProducto() {
+            return this.#nombreProducto;
         }
 
-        get getNombreProducto(){    
-            return this. #nombreProducto; 
+        // Métodos setter y getter para el inventario del producto
+        set setInventarioProducto(value) {
+            this.#inventarioProducto = value;
         }
-
-        set setInventarioProducto (value) {
-            this. #inventarioProducto = value;
-
-        }
-
-        get getInventarioProducto(){ 
+        get getInventarioProducto() {
             return this.#inventarioProducto;
         }
 
-        set setPrecioProducto (value){ 
-            this. #precioProducto = value;
+        // Métodos setter y getter para el precio del producto
+        set setPrecioProducto(value) {
+            this.#precioProducto = value;
         }
-
-        get getPrecioProducto(){
+        get getPrecioProducto() {
             return this.#precioProducto;
         }
     }
 
-
-    class ProductosTienda{
-
+    // Define la clase ProductosTienda para representar la tienda y sus productos
+    class ProductosTienda {
         #listaProductos;
 
-        constructor(){
-        this.#listaProductos = [];
+        constructor() {
+            this.#listaProductos = [];
         }
 
-        get getListaProductos(){
+        // Método getter para obtener la lista de productos
+        get getListaProductos() {
             return this.#listaProductos;
         }
 
-        cargaArchivoProductos(){
-
+        // Carga los productos desde el archivo datos.json
+        cargaArchivoProductos() {
             let contador = 0;
-            
-            if(datosArchivo.length > 0) { 
-                datosArchivo.forEach (objeto => {
-            contador++;
-            let producto = new Producto;
-            producto.setCodigoProducto= objeto.codigoProducto;
-            producto.setNombreProducto=objeto.nombreProducto;
-            producto.setInventarioProducto= objeto.inventarioProducto; 
-            producto.setPrecioProducto =objeto.precioProducto;
-            this.#listaProductos.push(producto);
-            
-            
-            }); 
+
+            if (datosArchivo.length > 0) {
+                datosArchivo.forEach(objeto => {
+                    contador++;
+                    let producto = new Producto;
+                    producto.setCodigoProducto = objeto.codigoProducto;
+                    producto.setNombreProducto = objeto.nombreProducto;
+                    producto.setInventarioProducto = objeto.inventarioProducto;
+                    producto.setPrecioProducto = objeto.precioProducto;
+                    this.#listaProductos.push(producto);
+                });
             } else {
-            console.log(`ERROR, el archivo datos.json no contiene datos\n`.red);
+                console.log(`ERROR, el archivo datos.json no contiene datos\n`.red);
             }
-            console.log(`Total de productos cargados ==>`.blue +` ${contador}`.red);
+            console.log(`Total de productos cargados ==>`.blue + ` ${contador}`.red);
         }
-        grabaArchivoProductos(){
-            const instanciaClaseAObjetos = this.getListaProductos.map(producto =>{
-            return {
-                codigoProducto: producto.getCodigoProducto, 
-                nombreProducto: producto.getNombreProducto,
-                inventarioProducto: producto.getInventarioProducto,
-                precioProducto: producto.getPrecioProducto
+
+        // Guarda los productos en el archivo datos.json
+        grabaArchivoProductos() {
+            const instanciaClaseAObjetos = this.getListaProductos.map(producto => {
+                return {
+                    codigoProducto: producto.getCodigoProducto,
+                    nombreProducto: producto.getNombreProducto,
+                    inventarioProducto: producto.getInventarioProducto,
+                    precioProducto: producto.getPrecioProducto
                 };
             });
 
-        const cadenaJson = JSON.stringify(instanciaClaseAObjetos,null,2);
-        const nombreArchivo= 'datos.json';
-        fs.writeFileSync(nombreArchivo, cadenaJson, 'UTF-8');
-        console.log(`DATOS GUARDADOS EN ${nombreArchivo}`.magenta);
+            // Convierte la instancia de clase a formato JSON
+            const cadenaJson = JSON.stringify(instanciaClaseAObjetos, null, 2);
+
+            // Escribe la cadena JSON en el archivo datos.json
+            const nombreArchivo = 'datos.json';
+            fs.writeFileSync(nombreArchivo, cadenaJson, 'UTF-8');
+            console.log(`DATOS GUARDADOS EN ${nombreArchivo}`.magenta);
         }
 
-        mostrarProductos(){
+        // Muestra la información de los productos
+        mostrarProductos() {
             this.getListaProductos.forEach(producto => {
-                    console.log(`             `+ producto.getCodigoProducto+`        /`+
-                                `             `+ producto.getNombreProducto+`         /`+
-                                `              `+producto.getInventarioProducto+`         /`+
-                                `               `+ producto.getPrecioProducto+`          /`);
-                                
-
-                })
+                console.log(`             ` + producto.getCodigoProducto + `        /` +
+                    `             ` + producto.getNombreProducto + `         /` +
+                    `              ` + producto.getInventarioProducto + `         /` +
+                    `               ` + producto.getPrecioProducto + `          /`);
+            });
         }
     }
-        let productosTienda = new ProductosTienda;
 
-        productosTienda.cargaArchivoProductos();
+    // Crea una instancia de la clase ProductosTienda
+    let productosTienda = new ProductosTienda;
 
-        console.log(`DATOS APERTURA TIENDA`.blue);
+    // Carga los productos desde el archivo datos.json
+    productosTienda.cargaArchivoProductos();
 
-        productosTienda.mostrarProductos();
+    console.log(`DATOS APERTURA TIENDA`.blue);
 
-        productosTienda.getListaProductos.forEach(producto =>{
-            producto.setInventarioProducto = Math.floor(Math.random() * (28- 1) + 1);
-        });
-        console.log("DATOS CIERRE TIENDA".green);
+    // Muestra la información de los productos al inicio de la apertura de la tienda
+    productosTienda.mostrarProductos();
 
-        productosTienda.mostrarProductos();
+    // Modifica aleatoriamente el inventario de cada producto
+    productosTienda.getListaProductos.forEach(producto => {
+        producto.setInventarioProducto = Math.floor(Math.random() * (28 - 1) + 1);
+    });
 
-        productosTienda.grabaArchivoProductos();
+    console.log("DATOS CIERRE TIENDA".green);
 
-}
+    // Muestra la información de los productos al final del día de cierre de la tienda
+    productosTienda.mostrarProductos();
+
+    // Guarda los datos actualizados en el archivo datos.json
+    productosTienda.grabaArchivoProductos();
+};
+
+// Llama a la función principal
+main();
+
 
 main();
